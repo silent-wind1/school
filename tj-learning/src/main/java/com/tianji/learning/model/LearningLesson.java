@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tianji.learning.model.enums.PlanStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 学生课程表
@@ -17,6 +18,7 @@ import java.util.Date;
  * @TableName learning_lesson
  */
 @TableName(value = "learning_lesson")
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @Data
 public class LearningLesson implements Serializable {
@@ -49,7 +51,7 @@ public class LearningLesson implements Serializable {
     /**
      * 学习计划状态，0-没有计划，1-计划进行中
      */
-    private Integer planStatus;
+    private PlanStatus planStatus;
 
     /**
      * 已学习小节数量

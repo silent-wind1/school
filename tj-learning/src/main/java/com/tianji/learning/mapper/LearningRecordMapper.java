@@ -1,7 +1,7 @@
 package com.tianji.learning.mapper;
 
-import com.tianji.learning.model.LearningRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.learning.model.LearningRecord;
 
 /**
 * @author 29515

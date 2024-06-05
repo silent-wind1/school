@@ -1,12 +1,13 @@
 package com.tianji.learning.controller;
 
 import com.tianji.api.dto.leanring.LearningLessonDTO;
-import com.tianji.api.dto.leanring.LearningRecordFormDTO;
+import com.tianji.learning.model.dto.LearningRecordFormDTO;
 import com.tianji.learning.service.LearningRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,7 @@ public class LearningRecordController {
 
     @ApiOperation("提交学习记录")
     @PostMapping
-    public void addLearningRecord(@RequestBody LearningRecordFormDTO formDTO) {
+    public void addLearningRecord(@RequestBody @Validated LearningRecordFormDTO formDTO) {
         recordService.addLearningRecord(formDTO);
     }
 }

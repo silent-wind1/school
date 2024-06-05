@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 学习记录表
@@ -49,17 +50,17 @@ public class LearningRecord implements Serializable {
     /**
      * 第一次观看时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 完成学习的时间
      */
-    private Date finishTime;
+    private LocalDateTime finishTime;
 
     /**
      * 更新时间（最近一次观看时间）
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
