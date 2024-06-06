@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @ApiModel(description = "学习计划表单实体")
 public class LearningPlanDTO {
-    @NotNull
+    @NotNull(message = "课程id不能为null")
     @ApiModelProperty("课程表id")
     @Min(1)
     private Long courseId;

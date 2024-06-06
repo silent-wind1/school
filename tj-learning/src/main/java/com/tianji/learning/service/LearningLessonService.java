@@ -5,6 +5,7 @@ import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.domain.query.PageQuery;
 import com.tianji.learning.model.LearningLesson;
 import com.tianji.learning.model.vo.LearningLessonVO;
+import com.tianji.learning.model.vo.LearningPlanPageVO;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
@@ -33,4 +34,6 @@ public interface LearningLessonService extends IService<LearningLesson> {
     LearningLesson queryByUserAndCourseId(Long userId, Long courseId);
 
     void createLearningPlan(@NotNull @Min(1) Long courseId, @NotNull @Range(min = 1, max = 50) Integer freq);
+
+    LearningPlanPageVO queryMyPlans(PageQuery query);
 }

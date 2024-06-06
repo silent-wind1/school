@@ -4,6 +4,7 @@ import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.common.domain.query.PageQuery;
 import com.tianji.learning.model.dto.LearningPlanDTO;
 import com.tianji.learning.model.vo.LearningLessonVO;
+import com.tianji.learning.model.vo.LearningPlanPageVO;
 import com.tianji.learning.service.LearningLessonService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -67,5 +68,11 @@ public class LearningLessonController{
     @PostMapping("/plans")
     public void createLearningPlans(@Valid @RequestBody LearningPlanDTO planDTO){
         lessonService.createLearningPlan(planDTO.getCourseId(), planDTO.getFreq());
+    }
+
+    @ApiOperation("查询我的学习计划")
+    @GetMapping("/plans")
+    public LearningPlanPageVO queryMyPlans(PageQuery query){
+        return lessonService.queryMyPlans(query);
     }
 }
