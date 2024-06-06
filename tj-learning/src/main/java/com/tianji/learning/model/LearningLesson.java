@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tianji.learning.model.enums.LessonStatus;
 import com.tianji.learning.model.enums.PlanStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +42,7 @@ public class LearningLesson implements Serializable {
     /**
      * 课程状态，0-未学习，1-学习中，2-已学完，3-已失效
      */
-    private Integer status;
+    private LessonStatus status;
 
     /**
      * 每周学习频率，例如每周学习6小节，则频率为6
