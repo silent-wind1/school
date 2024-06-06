@@ -20,8 +20,10 @@ import com.tianji.learning.model.enums.LessonStatus;
 import com.tianji.learning.model.enums.SectionType;
 import com.tianji.learning.service.LearningLessonService;
 import com.tianji.learning.service.LearningRecordService;
+import com.tianji.learning.utils.LearningRecordDelayTaskHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
     private final LearningLessonService lessonService;
 
     private final CourseClient courseClient;
+
+    private final LearningRecordDelayTaskHandler taskHandler;
 
     @Override
     public LearningLessonDTO queryLearningRecordByCourse(Long courseId) {
@@ -58,6 +62,7 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
     }
 
     @Override
+    @Transactional
     public void addLearningRecord(LearningRecordFormDTO formDTO) {
         // 1.获取登录用户
         Long userId = UserContext.getUser();
@@ -68,33 +73,44 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         } else {
             finished = handlerExamRecord(userId, formDTO);
         }
+        if (!finished) {
+            // 没有新学完的小节，无需更新课表中的学习进度
+            return;
+        }
         // 3.处理课表数据
-        handleLearningLessonsChanges(formDTO, finished);
+        handleLearningLessonsChanges(formDTO);
     }
 
-    private void handleLearningLessonsChanges(LearningRecordFormDTO formDTO, boolean finished) {
+    private void handleLearningLessonsChanges(LearningRecordFormDTO formDTO) {
         LearningLesson lesson = learningLessonMapper.selectById(formDTO.getLessonId());
         if (lesson == null) {
             throw new BizIllegalException("课程不存在");
         }
         // 2.判断是否有新的完成小节
         boolean allLearned = false;
-        if (finished) {
-            // 3.如果有新完成的小节，则需要查询课程数据
-            CourseFullInfoDTO cInfo = courseClient.getCourseInfoById(lesson.getCourseId(), false, false);
-            if (cInfo == null) {
-                throw new BizIllegalException("课程不存在，无法更新数据！");
-            }
-            // 4.比较课程是否全部学完：已学习小节 >= 课程总小节
-            allLearned = lesson.getLearnedSections() + 1 >= cInfo.getSectionNum();
+//        if (finished) {
+//            // 3.如果有新完成的小节，则需要查询课程数据
+//            CourseFullInfoDTO cInfo = courseClient.getCourseInfoById(lesson.getCourseId(), false, false);
+//            if (cInfo == null) {
+//                throw new BizIllegalException("课程不存在，无法更新数据！");
+//            }
+//            // 4.比较课程是否全部学完：已学习小节 >= 课程总小节
+//            allLearned = lesson.getLearnedSections() + 1 >= cInfo.getSectionNum();
+//        }
+        // 3.如果有新完成的小节，则需要查询课程数据
+        CourseFullInfoDTO cInfo = courseClient.getCourseInfoById(lesson.getCourseId(), false, false);
+        if (cInfo == null) {
+            throw new BizIllegalException("课程不存在，无法更新数据！");
         }
+        // 4.比较课程是否全部学完：已学习小节 >= 课程总小节
+        allLearned = lesson.getLearnedSections() + 1 >= cInfo.getSectionNum();
         // 5.更新课表
         lessonService.lambdaUpdate()
                 .set(lesson.getLearnedSections() == 0, LearningLesson::getStatus, LessonStatus.LEARNING.getValue())
                 .set(allLearned, LearningLesson::getStatus, LessonStatus.FINISHED.getValue())
-                .set(!finished, LearningLesson::getLatestSectionId, formDTO.getSectionId())
-                .set(!finished, LearningLesson::getLatestLearnTime, formDTO.getCommitTime())
-                .setSql(finished, "learned_sections = learned_sections + 1")
+                .set(allLearned, LearningLesson::getLatestSectionId, formDTO.getSectionId())
+                .set(allLearned, LearningLesson::getLatestLearnTime, formDTO.getCommitTime())
+                .setSql("learned_sections = learned_sections + 1")
                 .eq(LearningLesson::getId, lesson.getId())
                 .update();
     }
@@ -148,6 +164,16 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         // 4.存在，则更新
         // 4.1.判断是否是第一次完成
         boolean finished = !old.getFinished() && recordDTO.getMoment() * 2 >= recordDTO.getDuration();
+        if (!finished) {
+            LearningRecord record = new LearningRecord();
+            record.setLessonId(recordDTO.getLessonId());
+            record.setSectionId(recordDTO.getSectionId());
+            record.setMoment(recordDTO.getMoment());
+            record.setId(old.getId());
+            record.setFinished(old.getFinished());
+            taskHandler.addLearningRecordTask(record);
+            return false;
+        }
         // 4.2.更新数据
         boolean success = lambdaUpdate()
                 .set(LearningRecord::getMoment, recordDTO.getMoment())
@@ -158,7 +184,9 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         if (!success) {
             throw new DbException("更新学习记录失败！");
         }
-        return finished;
+        // 4.3.清理缓存
+        taskHandler.cleanRecordCache(recordDTO.getLessonId(), recordDTO.getSectionId());
+        return true;
     }
 
     /**
@@ -168,11 +196,24 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
      * @return
      */
     private LearningRecord queryOldRecord(Long lessonId, Long sectionId) {
-        return lambdaQuery()
+        // 1.查询缓存
+        LearningRecord record = taskHandler.readRecordCache(lessonId, sectionId);
+        // 2.如果命中，直接返回
+        if (record != null) {
+            return record;
+        }
+        // 3.未命中，查询数据库
+        record = lambdaQuery()
                 .eq(LearningRecord::getLessonId, lessonId)
                 .eq(LearningRecord::getSectionId, sectionId)
                 .one();
+        // 4.写入缓存
+        taskHandler.writeRecordCache(record);
+        return record;
     }
+
+
+
 
 }
 
