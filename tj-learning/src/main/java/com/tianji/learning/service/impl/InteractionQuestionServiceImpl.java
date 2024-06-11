@@ -9,6 +9,7 @@ import com.tianji.api.client.course.CourseClient;
 import com.tianji.api.client.search.SearchClient;
 import com.tianji.api.client.user.UserClient;
 import com.tianji.api.dto.course.CataSimpleInfoDTO;
+import com.tianji.api.dto.course.CourseFullInfoDTO;
 import com.tianji.api.dto.course.CourseSimpleInfoDTO;
 import com.tianji.api.dto.user.UserDTO;
 import com.tianji.common.domain.dto.PageDTO;
@@ -251,12 +252,48 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
 
     @Override
     public QuestionAdminVO queryQuestionByIdAdmin(Long id) {
-        return null;
+        InteractionQuestion question = getById(id);
+        if (question == null) {
+            return null;
+        }
+        QuestionAdminVO questionVO = BeanUtils.copyBean(question, QuestionAdminVO.class);
+        UserDTO user = userClient.queryUserById(question.getId());
+        if (user != null) {
+            questionVO.setUserName(user.getName());
+            questionVO.setUserIcon(user.getIcon());
+        }
+        CourseFullInfoDTO infoDTO = courseClient.getCourseInfoById(question.getCourseId(), false, true);
+        if (infoDTO != null) {
+            questionVO.setCourseName(infoDTO.getName());
+            questionVO.setCategoryName(categoryCache.getCategoryNames(infoDTO.getCategoryIds()));
+            List<Long> teacherIds = infoDTO.getTeacherIds();
+            List<UserDTO> teachers = userClient.queryUserByIds(teacherIds);
+            if (CollUtils.isNotEmpty(teachers)) {
+                questionVO.setTeacherName(teachers.stream()
+                        .map(UserDTO::getName).collect(Collectors.joining("/")));
+            }
+        }
+        // 5.查询章节信息
+        List<CataSimpleInfoDTO> catas = catalogueClient.batchQueryCatalogue(
+                List.of(question.getChapterId(), question.getSectionId()));
+        Map<Long, String> cataMap = new HashMap<>(catas.size());
+        if (CollUtils.isNotEmpty(catas)) {
+            cataMap = catas.stream()
+                    .collect(Collectors.toMap(CataSimpleInfoDTO::getId, CataSimpleInfoDTO::getName));
+        }
+        questionVO.setChapterName(cataMap.getOrDefault(question.getChapterId(), ""));
+        questionVO.setSectionName(cataMap.getOrDefault(question.getSectionId(), ""));
+        // 6.封装VO
+        return questionVO;
     }
 
     @Override
     public void hiddenQuestion(Long id, Boolean hidden) {
-
+        // 1.更新问题
+        InteractionQuestion question = new InteractionQuestion();
+        question.setId(id);
+        question.setHidden(hidden);
+        updateById(question);
     }
 
     @Override
