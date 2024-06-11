@@ -298,6 +298,9 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
 
     @Override
     public void updateQuestion(Long id, QuestionFormDTO questionDTO) {
+        // 1.获取当前登录用户
+        Long userId = UserContext.getUser();
+
         if (questionDTO.getAnonymity() == null || StringUtils.isBlank(questionDTO.getTitle()) || StringUtils.isBlank(questionDTO.getDescription())) {
             throw new BizIllegalException("非法参数");
         }
@@ -305,10 +308,16 @@ public class InteractionQuestionServiceImpl extends ServiceImpl<InteractionQuest
         if (question == null) {
             throw new BizIllegalException("非法参数");
         }
+        // 3.判断是否是当前用户的问题
+        if (!question.getUserId().equals(userId)) {
+            // 不是，抛出异常
+            throw new BadRequestException("无权修改他人的问题");
+        }
+        question.setId(id);
         question.setTitle(questionDTO.getTitle());
         question.setDescription(questionDTO.getDescription());
         question.setAnonymity(questionDTO.getAnonymity());
-        save(question);
+        updateById(question);
     }
 
     @Override
