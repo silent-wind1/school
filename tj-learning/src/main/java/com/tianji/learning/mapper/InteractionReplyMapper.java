@@ -1,7 +1,7 @@
 package com.tianji.learning.mapper;
 
-import com.tianji.learning.model.InteractionReply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.learning.model.InteractionReply;
 
 /**
 * @author 29515

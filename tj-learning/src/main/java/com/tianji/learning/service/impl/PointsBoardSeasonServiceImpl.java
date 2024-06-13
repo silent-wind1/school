@@ -1,0 +1,22 @@
+package com.tianji.learning.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tianji.learning.mapper.PointsBoardSeasonMapper;
+import com.tianji.learning.model.PointsBoardSeason;
+import com.tianji.learning.service.PointsBoardSeasonService;
+import org.springframework.stereotype.Service;
+
+/**
+* @author 29515
+* @description 针对表【points_board_season】的数据库操作Service实现
+* @createDate 2024-06-12 20:50:29
+*/
+@Service
+public class PointsBoardSeasonServiceImpl extends ServiceImpl<PointsBoardSeasonMapper, PointsBoardSeason>
+    implements PointsBoardSeasonService{
+
+}
+
+
+
+

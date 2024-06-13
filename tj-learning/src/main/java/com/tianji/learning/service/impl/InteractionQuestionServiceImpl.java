@@ -19,6 +19,7 @@ import com.tianji.common.utils.BeanUtils;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.StringUtils;
 import com.tianji.common.utils.UserContext;
+import com.tianji.learning.mapper.InteractionQuestionMapper;
 import com.tianji.learning.mapper.InteractionReplyMapper;
 import com.tianji.learning.model.InteractionQuestion;
 import com.tianji.learning.model.InteractionReply;
@@ -28,8 +29,6 @@ import com.tianji.learning.model.query.QuestionPageQuery;
 import com.tianji.learning.model.vo.QuestionAdminVO;
 import com.tianji.learning.model.vo.QuestionVO;
 import com.tianji.learning.service.InteractionQuestionService;
-import com.tianji.learning.mapper.InteractionQuestionMapper;
-import com.tianji.learning.service.InteractionReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
