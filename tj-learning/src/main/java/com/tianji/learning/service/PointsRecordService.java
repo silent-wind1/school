@@ -3,7 +3,10 @@ package com.tianji.learning.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.learning.model.PointsRecord;
 import com.tianji.learning.model.enums.PointsRecordType;
+import com.tianji.learning.model.vo.PointsStatisticsVO;
 import com.tianji.learning.mq.msg.SignInMessage;
+
+import java.util.List;
 
 /**
 * @author 29515
@@ -13,4 +16,6 @@ import com.tianji.learning.mq.msg.SignInMessage;
 public interface PointsRecordService extends IService<PointsRecord> {
 
     void addPointRecord(SignInMessage message, PointsRecordType type);
+
+    List<PointsStatisticsVO> queryMyPointsToday();
 }
