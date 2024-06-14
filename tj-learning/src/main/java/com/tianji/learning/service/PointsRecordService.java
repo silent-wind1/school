@@ -2,6 +2,8 @@ package com.tianji.learning.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.learning.model.PointsRecord;
+import com.tianji.learning.model.enums.PointsRecordType;
+import com.tianji.learning.mq.msg.SignInMessage;
 
 /**
 * @author 29515
@@ -10,4 +12,5 @@ import com.tianji.learning.model.PointsRecord;
 */
 public interface PointsRecordService extends IService<PointsRecord> {
 
+    void addPointRecord(SignInMessage message, PointsRecordType type);
 }

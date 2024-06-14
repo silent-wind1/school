@@ -1,10 +1,13 @@
 package com.tianji.learning.service.impl;
 
+import com.tianji.common.autoconfigure.mq.RabbitMqHelper;
+import com.tianji.common.constants.MqConstants;
 import com.tianji.common.exceptions.BizIllegalException;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.UserContext;
 import com.tianji.learning.constant.RedisConstant;
 import com.tianji.learning.model.vo.SignResultVO;
+import com.tianji.learning.mq.msg.SignInMessage;
 import com.tianji.learning.service.SignRecordsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
@@ -25,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SignRecordsServiceImpl implements SignRecordsService {
     private final StringRedisTemplate redisTemplate;
+    private final RabbitMqHelper rabbitMqHelper;
 
     @Override
     public SignResultVO addSignRecords() {
@@ -37,8 +41,21 @@ public class SignRecordsServiceImpl implements SignRecordsService {
         if (Boolean.TRUE.equals(result)) {
             throw new BizIllegalException("不能重复签到");
         }
-        int day = countSignDays(key, now.getDayOfMonth());
-        return null;
+        int days = countSignDays(key, now.getDayOfMonth());
+        int rewardPoints = 0;
+        switch (days) {
+            case 7: rewardPoints = 10;break;
+            case 14: rewardPoints = 20; break;
+            case 28: rewardPoints = 40; break;
+        }
+        // 保存积分
+        rabbitMqHelper.send(MqConstants.Exchange.LEARNING_EXCHANGE,
+                MqConstants.Key.SIGN_IN,
+                SignInMessage.of(userId, rewardPoints + 1));
+        SignResultVO vo = new SignResultVO();
+        vo.setSignDays(days);
+        vo.setRewardPoints(rewardPoints);
+        return vo;
     }
 
     private int countSignDays(String key, int dayOfMonth) {
