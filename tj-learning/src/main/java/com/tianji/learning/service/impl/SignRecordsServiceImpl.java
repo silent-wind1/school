@@ -58,6 +58,28 @@ public class SignRecordsServiceImpl implements SignRecordsService {
         return vo;
     }
 
+    @Override
+    public Byte[] querySignRecords() {
+        Long userId = UserContext.getUser();
+        LocalDate now = LocalDate.now();
+        String date = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
+        String key = RedisConstant.SIGN_RECODE_KEY_PREFIX + userId.toString() + date;
+        int day = now.getDayOfMonth();
+        List<Long> field = redisTemplate.opsForValue().bitField(key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(day)).valueAt(0));
+        if (CollUtils.isEmpty(field)) {
+            return new Byte[0];
+        }
+        Long num = field.get(0);
+        int offset =day - 1;
+        Byte[] bytes = new Byte[day];
+        while (offset > -1) {
+            bytes[offset] = (byte) (num & 1);
+            num = num >>> 1;
+            offset--;
+        }
+        return bytes;
+    }
+
     private int countSignDays(String key, int dayOfMonth) {
         List<Long> field = redisTemplate.opsForValue().bitField(key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0));
         if (CollUtils.isEmpty(field)) {

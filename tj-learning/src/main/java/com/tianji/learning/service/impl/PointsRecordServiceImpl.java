@@ -5,16 +5,21 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.DateUtils;
 import com.tianji.common.utils.UserContext;
+import com.tianji.learning.constant.RedisConstant;
 import com.tianji.learning.mapper.PointsRecordMapper;
 import com.tianji.learning.model.PointsRecord;
 import com.tianji.learning.model.enums.PointsRecordType;
 import com.tianji.learning.model.vo.PointsStatisticsVO;
 import com.tianji.learning.mq.msg.SignInMessage;
 import com.tianji.learning.service.PointsRecordService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +27,14 @@ import java.util.Map;
 import static cn.hutool.poi.excel.sax.AttributeName.r;
 
 /**
-* @author 29515
-* @description 针对表【points_record(学习积分记录，每个月底清零)】的数据库操作Service实现
-* @createDate 2024-06-12 20:50:29
-*/
+ * @author 29515
+ * @description 针对表【points_record(学习积分记录，每个月底清零)】的数据库操作Service实现
+ * @createDate 2024-06-12 20:50:29
+ */
 @Service
-public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, PointsRecord>
-    implements PointsRecordService{
+@RequiredArgsConstructor
+public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, PointsRecord> implements PointsRecordService {
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public void addPointRecord(SignInMessage message, PointsRecordType type) {
@@ -57,7 +63,7 @@ public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, Poi
                 return;
             }
 
-            if (currentPoints + realPoint  > maxPoints) {
+            if (currentPoints + realPoint > maxPoints) {
                 realPoint = maxPoints - currentPoints;
             }
 
@@ -66,6 +72,11 @@ public class PointsRecordServiceImpl extends ServiceImpl<PointsRecordMapper, Poi
             pointsRecord.setPoints(realPoint);
             pointsRecord.setType(type);
             this.save(pointsRecord);
+
+            LocalDate date = LocalDate.now();
+            String format = date.format(DateTimeFormatter.ofPattern(":yyyyyMM"));
+            String key = RedisConstant.POINTS_BOARD_KEY_PREFIX + format;
+            redisTemplate.opsForZSet().incrementScore(key, message.getUserId().toString(), realPoint);
         }
     }
 

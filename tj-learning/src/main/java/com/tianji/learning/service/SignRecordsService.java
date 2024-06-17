@@ -12,4 +12,5 @@ public interface SignRecordsService {
 
     SignResultVO addSignRecords();
 
+    Byte[] querySignRecords();
 }
