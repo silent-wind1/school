@@ -1,10 +1,10 @@
 package com.tianji.search.repository.impl;
 
-import com.tianji.search.domain.po.Course;
-import com.tianji.search.repository.CourseRepository;
 import com.tianji.common.exceptions.CommonException;
 import com.tianji.common.utils.JsonUtils;
 import com.tianji.common.utils.StringUtils;
+import com.tianji.search.domain.po.Course;
+import com.tianji.search.repository.CourseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;

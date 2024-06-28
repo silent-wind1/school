@@ -1,12 +1,12 @@
 package com.tianji.user.service.impl;
 
-import com.tianji.message.domain.enums.SmsTemplate;
 import com.tianji.common.exceptions.BadRequestException;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.common.utils.RandomUtils;
 import com.tianji.common.utils.StringUtils;
 import com.tianji.message.api.client.AsyncSmsClient;
 import com.tianji.message.domain.dto.SmsInfoDTO;
+import com.tianji.message.domain.enums.SmsTemplate;
 import com.tianji.user.service.ICodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,16 +1,16 @@
 package com.tianji.media.storage.tencent;
 
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.model.*;
+import com.qcloud.cos.model.DeleteObjectsRequest.KeyVersion;
+import com.qcloud.cos.transfer.TransferManager;
+import com.qcloud.cos.transfer.Upload;
 import com.tianji.common.exceptions.BadRequestException;
 import com.tianji.common.exceptions.CommonException;
 import com.tianji.common.utils.AssertUtils;
 import com.tianji.common.utils.CollUtils;
 import com.tianji.media.config.TencentProperties;
 import com.tianji.media.storage.IFileStorage;
-import com.qcloud.cos.COSClient;
-import com.qcloud.cos.model.*;
-import com.qcloud.cos.model.DeleteObjectsRequest.KeyVersion;
-import com.qcloud.cos.transfer.TransferManager;
-import com.qcloud.cos.transfer.Upload;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.InputStream;

@@ -11,6 +11,7 @@ import com.tianji.learning.model.PointsBoardSeason;
 */
 public interface PointsBoardSeasonMapper extends BaseMapper<PointsBoardSeason> {
 
+    void createPointsBoardTable(String s);
 }
 
 

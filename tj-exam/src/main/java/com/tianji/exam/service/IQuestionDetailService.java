@@ -1,7 +1,7 @@
 package com.tianji.exam.service;
 
-import com.tianji.exam.domain.po.QuestionDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tianji.exam.domain.po.QuestionDetail;
 
 /**
  * <p>

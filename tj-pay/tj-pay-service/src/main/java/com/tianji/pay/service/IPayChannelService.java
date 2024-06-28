@@ -1,8 +1,8 @@
 package com.tianji.pay.service;
 
-import com.tianji.pay.sdk.dto.PayChannelDTO;
-import com.tianji.pay.domain.po.PayChannel;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tianji.pay.domain.po.PayChannel;
+import com.tianji.pay.sdk.dto.PayChannelDTO;
 
 /**
  * <p>

@@ -211,10 +211,6 @@ public class LearningRecordServiceImpl extends ServiceImpl<LearningRecordMapper,
         taskHandler.writeRecordCache(record);
         return record;
     }
-
-
-
-
 }
 
 

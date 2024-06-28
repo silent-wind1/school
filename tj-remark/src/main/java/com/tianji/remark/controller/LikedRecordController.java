@@ -36,7 +36,3 @@ public class LikedRecordController{
         return likedRecordService.getLikesStatusByBizIds(bizIds);
     }
 }
-
-
-
-

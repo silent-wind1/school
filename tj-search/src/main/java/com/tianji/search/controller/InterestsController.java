@@ -1,10 +1,10 @@
 package com.tianji.search.controller;
 
 
+import com.tianji.api.dto.course.CategoryBasicDTO;
 import com.tianji.search.domain.vo.CourseVO;
 import com.tianji.search.service.IInterestsService;
 import com.tianji.search.service.ISearchService;
-import com.tianji.api.dto.course.CategoryBasicDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

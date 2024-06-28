@@ -1,6 +1,7 @@
 package com.tianji.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.api.dto.IdAndNumDTO;
 import com.tianji.api.dto.exam.QuestionBizDTO;
 import com.tianji.common.utils.BeanUtils;
@@ -8,7 +9,6 @@ import com.tianji.common.utils.CollUtils;
 import com.tianji.exam.domain.po.QuestionBiz;
 import com.tianji.exam.mapper.QuestionBizMapper;
 import com.tianji.exam.service.IQuestionBizService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

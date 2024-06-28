@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static cn.hutool.poi.excel.sax.AttributeName.r;
-
 /**
  * @author 29515
  * @description 针对表【points_record(学习积分记录，每个月底清零)】的数据库操作Service实现

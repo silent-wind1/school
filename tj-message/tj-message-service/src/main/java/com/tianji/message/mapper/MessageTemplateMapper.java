@@ -1,7 +1,7 @@
 package com.tianji.message.mapper;
 
-import com.tianji.message.domain.po.MessageTemplate;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.message.domain.po.MessageTemplate;
 
 /**
  * <p>

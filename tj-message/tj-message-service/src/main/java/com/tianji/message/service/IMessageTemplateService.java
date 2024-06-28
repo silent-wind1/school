@@ -1,11 +1,11 @@
 package com.tianji.message.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.message.domain.dto.MessageTemplateDTO;
 import com.tianji.message.domain.dto.MessageTemplateFormDTO;
-import com.tianji.message.domain.query.MessageTemplatePageQuery;
-import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.message.domain.po.MessageTemplate;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.tianji.message.domain.query.MessageTemplatePageQuery;
 
 import java.util.List;
 

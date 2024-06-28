@@ -1,7 +1,10 @@
 package com.tianji.course.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tianji.api.dto.course.*;
+import com.tianji.api.dto.course.CourseDTO;
+import com.tianji.api.dto.course.CourseFullInfoDTO;
+import com.tianji.api.dto.course.CourseSimpleInfoDTO;
+import com.tianji.api.dto.course.SubNumAndCourseNumDTO;
 import com.tianji.common.domain.dto.PageDTO;
 import com.tianji.course.domain.dto.CoursePageQuery;
 import com.tianji.course.domain.dto.CourseSimpleInfoListDTO;

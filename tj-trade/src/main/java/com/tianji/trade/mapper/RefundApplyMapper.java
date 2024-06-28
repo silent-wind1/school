@@ -1,7 +1,7 @@
 package com.tianji.trade.mapper;
 
-import com.tianji.trade.domain.po.RefundApply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.trade.domain.po.RefundApply;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

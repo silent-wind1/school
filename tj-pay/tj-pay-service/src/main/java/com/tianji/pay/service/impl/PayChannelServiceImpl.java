@@ -1,11 +1,11 @@
 package com.tianji.pay.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tianji.common.utils.BeanUtils;
-import com.tianji.pay.sdk.dto.PayChannelDTO;
 import com.tianji.pay.domain.po.PayChannel;
 import com.tianji.pay.mapper.PayChannelMapper;
+import com.tianji.pay.sdk.dto.PayChannelDTO;
 import com.tianji.pay.service.IPayChannelService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

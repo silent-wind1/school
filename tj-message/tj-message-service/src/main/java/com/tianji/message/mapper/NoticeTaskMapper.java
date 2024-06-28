@@ -1,7 +1,7 @@
 package com.tianji.message.mapper;
 
-import com.tianji.message.domain.po.NoticeTask;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.message.domain.po.NoticeTask;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;

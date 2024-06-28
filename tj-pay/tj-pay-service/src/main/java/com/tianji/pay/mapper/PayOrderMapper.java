@@ -1,7 +1,7 @@
 package com.tianji.pay.mapper;
 
-import com.tianji.pay.domain.po.PayOrder;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.pay.domain.po.PayOrder;
 
 /**
  * <p>

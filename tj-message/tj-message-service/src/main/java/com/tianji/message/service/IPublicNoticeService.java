@@ -1,8 +1,8 @@
 package com.tianji.message.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tianji.message.domain.po.NoticeTemplate;
 import com.tianji.message.domain.po.PublicNotice;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>

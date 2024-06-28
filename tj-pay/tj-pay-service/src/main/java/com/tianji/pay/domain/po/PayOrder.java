@@ -1,6 +1,9 @@
 package com.tianji.pay.domain.po;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.tianji.pay.third.model.PayStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

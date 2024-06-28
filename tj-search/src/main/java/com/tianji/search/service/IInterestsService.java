@@ -1,8 +1,8 @@
 package com.tianji.search.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tianji.search.domain.po.Interests;
 import com.tianji.api.dto.course.CategoryBasicDTO;
+import com.tianji.search.domain.po.Interests;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.tianji.search.mapper;
 
-import com.tianji.search.domain.po.Interests;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tianji.search.domain.po.Interests;
 
 /**
  * <p>
